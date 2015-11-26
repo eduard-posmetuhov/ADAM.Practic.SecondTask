@@ -1,0 +1,12 @@
+D:\ADAM\First_Task\First_Task\bin\Debug\First_Task.exe.config
+D:\ADAM\First_Task\First_Task\bin\Debug\First_Task.exe
+D:\ADAM\First_Task\First_Task\bin\Debug\First_Task.pdb
+D:\ADAM\First_Task\First_Task\bin\Debug\Microsoft.Practices.Unity.dll
+D:\ADAM\First_Task\First_Task\bin\Debug\System.Web.Http.dll
+D:\ADAM\First_Task\First_Task\bin\Debug\Microsoft.Owin.Security.dll
+D:\ADAM\First_Task\First_Task\bin\Debug\Microsoft.Owin.dll
+D:\ADAM\First_Task\First_Task\bin\Debug\System.Net.Http.Formatting.dll
+D:\ADAM\First_Task\First_Task\bin\Debug\Owin.dll
+D:\ADAM\First_Task\First_Task\obj\Debug\First_Task.csprojResolveAssemblyReference.cache
+D:\ADAM\First_Task\First_Task\obj\Debug\First_Task.exe
+D:\ADAM\First_Task\First_Task\obj\Debug\First_Task.pdb
