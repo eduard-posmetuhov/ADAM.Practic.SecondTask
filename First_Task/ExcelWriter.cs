@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Adam.Core.Records;
+using System;
 using System.Collections.Generic;
+using Adam.Core.Fields;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,7 +12,6 @@ namespace First_Task
 {
     class ExcelWriter
     {
-        //private Dictionary<Guid, string> _source;
         private readonly string _fileName;
 
         public ExcelWriter(string Path)
@@ -18,32 +19,39 @@ namespace First_Task
             _fileName=Path;
         }
 
-        public bool Write(Dictionary<Guid,string> source)
+        public bool Write(Dictionary<Guid,string> source, Adam.Core.Application app)
         {
-            Excel.Application myExcelApp;
-            Excel.Workbook myExcelWorkbook;
-            Excel.Worksheet myExcelWorksheet;
-            myExcelApp = new Excel.Application();
+            Record r = new Record(app);
+            Excel.Application EApp;
+            Excel.Workbook EWorkbook;
+            Excel.Worksheet EWorksheet;
+            Excel.Range Rng;
+            EApp = new Excel.Application();
             object misValue = System.Reflection.Missing.Value;
-            myExcelWorkbook = myExcelApp.Workbooks.Add(misValue);
-            myExcelWorksheet = (Excel.Worksheet)myExcelWorkbook.Worksheets.Item[1]; 
-                        
-            myExcelWorksheet.get_Range("A1", misValue).Formula = "UPC code";
-            myExcelWorksheet.get_Range("B1", misValue).Formula = "Link";
+            EWorkbook = EApp.Workbooks.Add(misValue);
+            EWorksheet = (Excel.Worksheet)EWorkbook.Worksheets.Item[1];                         
+            EWorksheet.get_Range("A1", misValue).Formula = "UPC code";
+            EWorksheet.get_Range("B1", misValue).Formula = "Link";            
+            Rng = EWorksheet.get_Range("A2", misValue).get_Resize(source.Count,misValue);
+            Rng.NumberFormat = "00000000000000";
             int row = 2;
             foreach(KeyValuePair<Guid,string> pair in source)
-            {               
-                myExcelWorksheet.Cells[row,1] = pair.Value;
-                myExcelWorksheet.Cells[row,2]= @"https://evbyminsd38fe/Assets/Records/~"+pair.Key;
+            {              
+                EWorksheet.Cells[row,1] = pair.Value;                
+                r.Load(pair.Key);
+                Rng = EWorksheet.get_Range("B"+row, misValue);
+                EWorksheet.Hyperlinks.Add(Rng, r.Fields.GetField<TextField>("Content Url").Value);               
+                //myExcelWorksheet.Cells[row, 2] = r.Fields.GetField<TextField>("Content Url").Value;                                
                 row++;
             }
-
-            myExcelWorkbook.SaveAs(_fileName, Excel.XlFileFormat.xlWorkbookNormal, misValue, misValue, misValue, misValue,
+            ((Excel.Range)EWorksheet.Cells[2, 1]).EntireColumn.AutoFit();
+            ((Excel.Range)EWorksheet.Cells[2, 2]).EntireColumn.AutoFit();
+            EWorkbook.SaveAs(_fileName, Excel.XlFileFormat.xlWorkbookNormal, misValue, misValue, misValue, misValue,
                 Excel.XlSaveAsAccessMode.xlExclusive,
                 misValue, misValue, misValue, misValue, misValue);
 
-            myExcelWorkbook.Close(true, misValue, misValue);
-            myExcelApp.Quit();
+            EWorkbook.Close(true, misValue, misValue);
+            EApp.Quit();
             return true;
         }
     }
